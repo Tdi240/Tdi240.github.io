@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andrei-Theodor Ginavar — Digital Finance &amp; Tail Risk Research</title>
+<meta name="description" content="Andrei-Theodor Ginavar — Ph.D. researcher applying large language models to digital asset risk forecasting. MSCA Early Stage Researcher at Cardo AI, Institute of Digital Assets.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f8f4ee;
+    --surface:#f1e8dd;
+    --surface-2:#eaddce;
+    --hair:#ddc7b4;
+    --hair-soft:#e8dbc9;
+    --text:#2a1614;
+    --text-muted:#6e5350;
+    --text-faint:#a1867f;
+    --maroon:#b5541f;
+    --maroon-deep:#7a3510;
+    --red:#9c2b35;
+    --paper:#ffffff;
+    --radius:0px;
+    --wrap:1180px;
+    --sans:'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --mono:'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+
+  body{
+    margin:0;
+    background:
+      radial-gradient(1000px 460px at 88% -10%, rgba(122,31,43,0.07), transparent 60%),
+      radial-gradient(800px 420px at -10% 6%, rgba(122,31,43,0.06), transparent 55%),
+      var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{color:inherit;}
+  ::selection{background:var(--maroon); color:var(--paper);}
+  a:focus-visible, button:focus-visible{ outline:2px solid var(--maroon); outline-offset:3px; }
+
+  .wrap{max-width:var(--wrap); margin:0 auto; padding:0 28px;}
+
+  .grid-bg{
+    position:absolute; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      linear-gradient(rgba(122,31,43,0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(122,31,43,0.045) 1px, transparent 1px);
+    background-size:60px 60px;
+    mask-image:linear-gradient(to bottom, black, transparent 88%);
+  }
+
+  /* ---------- nav ---------- */
+  header.site-nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(248,244,238,0.9);
+    backdrop-filter:blur(10px);
+    border-bottom:2px solid var(--maroon);
+  }
+  .nav-inner{ display:flex; align-items:center; justify-content:space-between; height:68px; }
+  .brand{
+    font-family:var(--sans); font-size:16px; letter-spacing:0.02em;
+    color:var(--text); text-decoration:none; font-weight:800; text-transform:uppercase;
+    display:flex; align-items:center; gap:8px;
+  }
+  .brand .dot{width:7px; height:7px; background:var(--maroon); border-radius:50%; display:inline-block;}
+  nav.links{display:flex; gap:32px; align-items:center;}
+  nav.links a{
+    font-size:12.5px; text-decoration:none; color:var(--text-muted);
+    letter-spacing:0.08em; text-transform:uppercase; font-weight:600;
+    transition:color .18s ease; padding:4px 0; position:relative;
+  }
+  nav.links a:hover{color:var(--text);}
+  nav.links a::after{
+    content:''; position:absolute; left:0; right:0; bottom:-4px; height:2px;
+    background:var(--maroon); transform:scaleX(0); transform-origin:left;
+    transition:transform .22s ease;
+  }
+  nav.links a:hover::after{transform:scaleX(1);}
+  .nav-cta{
+    font-family:var(--sans); font-size:12.5px; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--paper); background:var(--maroon); text-decoration:none;
+    padding:11px 20px; font-weight:700; white-space:nowrap;
+    transition:background .18s ease; border:1px solid var(--maroon);
+  }
+  .nav-cta:hover{background:var(--maroon-deep); border-color:var(--maroon-deep);}
+
+  /* ---------- hero (masthead layout) ---------- */
+  .hero{position:relative; overflow:hidden; padding:70px 0 0; border-top:none;}
+  .hero-top{position:relative; z-index:1; text-align:left; padding-bottom:44px;}
+  .eyebrow{
+    font-family:var(--mono); font-size:12.5px; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--maroon); margin:0 0 22px; display:flex; align-items:center; gap:12px; font-weight:600;
+  }
+  .eyebrow::before{content:''; width:34px; height:2px; background:var(--maroon);}
+  h1.name{
+    font-family:var(--sans); font-weight:800; font-size:clamp(46px, 8.6vw, 108px);
+    line-height:0.94; margin:0 0 26px; letter-spacing:-0.02em; text-transform:uppercase;
+    color:var(--text);
+  }
+  .hero p.lede{
+    font-size:19px; line-height:1.65; color:var(--text-muted); max-width:58ch; margin:0 0 40px; font-weight:400;
+  }
+
+  .stat-row{
+    display:grid; grid-template-columns:repeat(3,1fr); border-top:2px solid var(--maroon); border-bottom:2px solid var(--maroon);
+    margin-bottom:40px; position:relative; z-index:1;
+  }
+  .stat-box{padding:20px 22px; border-right:1px solid var(--hair);}
+  .stat-box:last-child{border-right:none;}
+  .stat-box .s-label{
+    font-family:var(--mono); font-size:10.5px; text-transform:uppercase; letter-spacing:0.08em;
+    color:var(--text-faint); margin-bottom:8px;
+  }
+  .stat-box .s-value{font-size:15px; font-weight:700; color:var(--text); line-height:1.35;}
+  .stat-box.center{text-align:center;}
+
+  .cta-row{display:flex; flex-wrap:wrap; gap:16px; margin-bottom:0; position:relative; z-index:1;}
+  .btn{
+    font-family:var(--sans); font-weight:700; font-size:14px; text-transform:uppercase; letter-spacing:0.04em;
+    text-decoration:none; padding:16px 26px; display:inline-flex; align-items:center; gap:9px;
+    transition:all .18s ease; border:1px solid transparent;
+  }
+  .btn-primary{background:var(--maroon); color:var(--paper);}
+  .btn-primary:hover{background:var(--maroon-deep);}
+  .btn-ghost{border:1px solid var(--hair); color:var(--text);}
+  .btn-ghost:hover{border-color:var(--maroon); color:var(--maroon);}
+
+  /* ---------- logo strip ---------- */
+  .logo-strip{
+    background:var(--surface); border-top:2px solid var(--maroon); border-bottom:1px solid var(--hair-soft);
+    padding:34px 0; position:relative; z-index:1;
+  }
+  .logo-strip-inner{
+    display:flex; align-items:center; justify-content:center; gap:52px; flex-wrap:wrap;
+  }
+  .logo-strip-label{
+    font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.1em;
+    color:var(--text-faint); margin-right:6px;
+  }
+  .logo-strip-inner img{
+    height:34px; width:auto; display:block;
+    filter:grayscale(1) opacity(0.55);
+    transition:filter .2s ease;
+  }
+  .logo-strip-inner a:hover img{ filter:grayscale(0) opacity(1); }
+
+  /* ---------- section shell ---------- */
+  section{position:relative; padding:96px 0; border-top:1px solid var(--hair-soft);}
+  .section-head{margin-bottom:50px; max-width:680px; display:flex; align-items:baseline; gap:22px;}
+  .section-num{
+    font-family:var(--mono); font-size:15px; color:var(--maroon); font-weight:700; letter-spacing:0.04em;
+  }
+  h2.section-title{
+    font-family:var(--sans); font-size:clamp(28px, 3.4vw, 40px); font-weight:800;
+    margin:0; letter-spacing:-0.01em; text-transform:uppercase; line-height:1.05; color:var(--text);
+  }
+  .section-desc{color:var(--text-muted); font-size:15.5px; margin:14px 0 0; line-height:1.65; max-width:60ch;}
+
+  /* ---------- about ---------- */
+  .about-grid{display:grid; grid-template-columns:1fr 1.3fr; gap:56px;}
+  .about-grid p{color:var(--text-muted); font-size:16px; line-height:1.8; margin:0 0 18px;}
+  .about-grid p strong{color:var(--text); font-weight:700;}
+  .fact-card{border-top:2px solid var(--maroon); padding:16px 0; margin-bottom:0; border-bottom:1px solid var(--hair-soft);}
+  .fact-card .fact-label{
+    font-family:var(--mono); font-size:10.5px; color:var(--text-faint);
+    text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px;
+  }
+  .fact-card .fact-value{font-size:15px; color:var(--text); font-weight:600;}
+  .fact-card .fact-value a{color:var(--maroon); text-decoration:none; border-bottom:1px solid var(--hair);}
+  .fact-card .fact-value a:hover{color:var(--maroon-deep);}
+
+  /* ---------- timeline (ledger style) ---------- */
+  .timeline{margin-top:6px; border-top:1px solid var(--hair-soft);}
+  .t-item{
+    display:grid; grid-template-columns:140px 1fr; gap:30px;
+    padding:36px 0; border-bottom:1px solid var(--hair-soft);
+  }
+  .t-date{
+    font-family:var(--sans); font-weight:800; font-size:26px; color:var(--maroon); line-height:1.1;
+  }
+  .t-date small{display:block; font-family:var(--mono); font-size:11px; color:var(--text-faint); font-weight:400; margin-top:6px; text-transform:uppercase;}
+  .t-content{border-left:3px solid var(--maroon); padding-left:26px;}
+  .t-content.education{border-left-color:var(--text-faint);}
+  .t-role{font-family:var(--sans); font-size:20px; font-weight:800; margin:0 0 6px; text-transform:uppercase; letter-spacing:-0.01em; color:var(--text);}
+  .t-org{font-size:14.5px; color:var(--text-muted); margin:0 0 4px; font-weight:600;}
+  .t-loc{font-family:var(--mono); font-size:11.5px; color:var(--text-faint); margin:0 0 14px; text-transform:uppercase;}
+  .t-content ul{margin:10px 0 0; padding-left:18px; color:var(--text-muted); font-size:14.5px; line-height:1.7;}
+  .t-content ul li{margin-bottom:5px;}
+  .t-content p.t-desc{color:var(--text-muted); font-size:14.5px; line-height:1.7; margin:8px 0 0;}
+  .t-tag{
+    display:inline-block; font-family:var(--mono); font-size:10.5px; letter-spacing:0.06em;
+    text-transform:uppercase; color:var(--paper); background:var(--maroon);
+    padding:3px 9px; margin-bottom:12px; font-weight:600;
+  }
+  .t-content.education .t-tag{background:var(--surface-2); color:var(--text-muted); border:1px solid var(--hair);}
+
+  /* ---------- projects ---------- */
+  .project-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:1px; background:var(--hair-soft); border:1px solid var(--hair-soft);}
+  .project-card{ background:var(--bg); padding:30px 26px; display:flex; flex-direction:column; border-top:3px solid var(--maroon);}
+  .project-card .p-date{ font-family:var(--mono); font-size:11px; color:var(--maroon); letter-spacing:0.05em; margin-bottom:14px; text-transform:uppercase; font-weight:600;}
+  .project-card h3{font-family:var(--sans); font-size:18px; font-weight:800; margin:0 0 14px; line-height:1.3; text-transform:uppercase; color:var(--text);}
+  .project-card p{color:var(--text-muted); font-size:13.5px; line-height:1.7; margin:0; flex-grow:1;}
+
+  /* ---------- publications ---------- */
+  .pub-list{display:flex; flex-direction:column; gap:0; border-top:1px solid var(--hair-soft);}
+  .pub-item{ padding:32px 0; border-bottom:1px solid var(--hair-soft); display:grid; grid-template-columns:110px 1fr; gap:26px;}
+  .pub-year{font-family:var(--sans); font-size:32px; color:var(--maroon); font-weight:800;}
+  .pub-title{font-family:var(--sans); font-size:19px; font-weight:800; margin:0 0 10px; line-height:1.35; text-transform:uppercase; color:var(--text);}
+  .pub-authors{font-size:13.5px; color:var(--text-muted); margin:0 0 8px; line-height:1.6;}
+  .pub-authors .me{color:var(--text); font-weight:700;}
+  .pub-venue{font-family:var(--mono); font-size:12px; color:var(--maroon); letter-spacing:0.02em; text-transform:uppercase;}
+
+  /* ---------- activities ---------- */
+  .activity-cols{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--hair-soft); border:1px solid var(--hair-soft);}
+  .activity-col{background:var(--bg); padding:0 26px 26px;}
+  .activity-col h3{
+    font-family:var(--sans); font-size:13px; text-transform:uppercase; letter-spacing:0.06em; font-weight:800;
+    color:var(--maroon); margin:0; padding:22px 0 16px; border-bottom:2px solid var(--maroon);
+  }
+  .activity-col .a-entry{margin-top:20px;}
+  .activity-col .a-date{font-family:var(--mono); font-size:11px; color:var(--text-faint); margin-bottom:4px; text-transform:uppercase;}
+  .activity-col .a-text{font-size:14px; color:var(--text-muted); line-height:1.6;}
+  .activity-col .a-text strong{color:var(--text); font-weight:700;}
+  .activity-col .a-text a{color:var(--maroon); text-decoration:none; border-bottom:1px solid var(--hair);}
+
+  /* ---------- skills / languages ---------- */
+  .skills-lang{display:grid; grid-template-columns:1.4fr 1fr; gap:56px; align-items:start;}
+  .skill-grid{display:flex; flex-wrap:wrap; gap:0; border-top:1px solid var(--hair); border-left:1px solid var(--hair);}
+  .skill-pill{
+    font-family:var(--mono); font-size:13px; color:var(--text); text-transform:uppercase;
+    padding:12px 20px; border-right:1px solid var(--hair); border-bottom:1px solid var(--hair);
+  }
+  .lang-row{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:14px 0; border-bottom:1px solid var(--hair-soft); font-size:14.5px;
+  }
+  .lang-row:last-child{border-bottom:none;}
+  .lang-row .lvl{font-family:var(--mono); color:var(--maroon); font-size:13px; font-weight:700;}
+
+  /* ---------- footer / contact ---------- */
+  footer{ padding:100px 0 56px; border-top:2px solid var(--maroon); position:relative;}
+  .footer-inner{display:grid; grid-template-columns:1.2fr 1fr; gap:40px; align-items:end;}
+  footer h2{
+    font-family:var(--sans); font-size:clamp(32px,4.6vw,56px); font-weight:800; margin:0 0 20px;
+    line-height:1.02; text-transform:uppercase; letter-spacing:-0.01em; color:var(--text);
+  }
+  footer p.foot-lede{color:var(--text-muted); font-size:15.5px; max-width:44ch; margin:0 0 26px;}
+  .foot-links{display:flex; flex-direction:column; gap:16px; align-items:flex-end;}
+  .foot-links a{
+    font-family:var(--mono); font-size:14px; text-decoration:none; color:var(--text);
+    display:flex; align-items:center; gap:8px; border-bottom:1px solid transparent;
+    transition:border-color .18s ease, color .18s ease; text-transform:uppercase; letter-spacing:0.02em;
+  }
+  .foot-links a:hover{color:var(--maroon); border-color:var(--hair);}
+  .foot-bottom{
+    margin-top:76px; display:flex; justify-content:space-between; align-items:center;
+    font-family:var(--mono); font-size:11.5px; color:var(--text-faint); flex-wrap:wrap; gap:10px; text-transform:uppercase;
+  }
+
+  /* ---------- reveal on scroll ---------- */
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:920px){
+    .about-grid{grid-template-columns:1fr;}
+    .project-grid{grid-template-columns:1fr;}
+    .activity-cols{grid-template-columns:1fr;}
+    .skills-lang{grid-template-columns:1fr; gap:36px;}
+    .footer-inner{grid-template-columns:1fr;}
+    .foot-links{align-items:flex-start;}
+    nav.links{display:none;}
+    .stat-row{grid-template-columns:1fr 1fr;}
+    .stat-box{border-bottom:1px solid var(--hair);}
+  }
+  @media (max-width:640px){
+    .wrap{padding:0 20px;}
+    .pub-item{grid-template-columns:1fr; gap:8px;}
+    .pub-year{font-size:20px;}
+    .t-item{grid-template-columns:1fr; gap:14px;}
+    .stat-row{grid-template-columns:1fr;}
+    .stat-box{border-right:none;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site-nav">
+  <div class="wrap nav-inner">
+    <a href="#top" class="brand"><span class="dot"></span>A. T. GINAVAR</a>
+    <nav class="links">
+      <a href="#about">About</a>
+      <a href="#publications">Publications</a>
+      <a href="#timeline">Timeline</a>
+      <a href="#research">Research</a>
+      <a href="#activities">Activities</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="nav-cta" href="files/CV_ATG.pdf" target="_blank" rel="noopener">Download CV</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ================= HERO ================= -->
+  <section class="hero" style="border-top:none;">
+    <div class="grid-bg"></div>
+    <div class="wrap hero-top">
+      <p class="eyebrow">Ph.D. Researcher — Digital Finance</p>
+      <h1 class="name">Andrei-Theodor<br>Ginavar</h1>
+      <p class="lede">Time series, tail risk, and economics of crypto markets.</p>
+    </div>
+
+    <div class="wrap">
+      <div class="stat-row">
+        <div class="stat-box">
+          <div class="s-label">Current role</div>
+          <div class="s-value">Early Stage Researcher, Cardo AI</div>
+        </div>
+        <div class="stat-box">
+          <div class="s-label">Program</div>
+          <div class="s-value">MSCA Industrial Doctoral Network</div>
+        </div>
+        <div class="stat-box center">
+          <div class="s-label">Based in</div>
+          <div class="s-value">Milan, IT &amp; Bucharest, RO</div>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn btn-primary" href="files/CV_ATG.pdf" target="_blank" rel="noopener">Download CV</a>
+        <a class="btn btn-ghost" href="mailto:theodorginavar@gmail.com">theodorginavar@gmail.com</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= AFFILIATIONS ================= -->
+  <div class="logo-strip">
+    <div class="wrap logo-strip-inner">
+      <span class="logo-strip-label">Affiliated with</span>
+      <a href="https://www.theida.net" target="_blank" rel="noopener" aria-label="Institute of Digital Assets">
+        <img src="assets/ida-logo.svg" alt="Institute of Digital Assets logo">
+      </a>
+      <a href="https://www.quantlet.com" target="_blank" rel="noopener" aria-label="Quantlet">
+        <img src="assets/quantlet-logo.svg" alt="Quantlet logo">
+      </a>
+      <a href="https://www.quantinar.com" target="_blank" rel="noopener" aria-label="Quantinar">
+        <img src="assets/quantinar-logo.svg" alt="Quantinar logo">
+      </a>
+    </div>
+  </div>
+
+  <!-- ================= ABOUT ================= -->
+  <section id="about">
+    <div class="wrap reveal">
+      <div class="section-head">
+        <span class="section-num">01</span>
+        <h2 class="section-title">About</h2>
+      </div>
+      <div class="about-grid">
+        <div>
+          <div class="fact-card">
+            <div class="fact-label">Current position</div>
+            <div class="fact-value">Early Stage Researcher, Cardo AI — Milan, IT</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Affiliation</div>
+            <div class="fact-value">ASE Bucharest, MSCA Digital Finance, IDA Institute of Digital Assets</a></div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Elsewhere</div>
+            <div class="fact-value"><a href="https://www.theida.net" target="_blank" rel="noopener">theIDA.net</a> · <a href="https://www.quantlet.com" target="_blank" rel="noopener">Quantlet.com</a> · <a href="https://www.quantinar.com" target="_blank" rel="noopener">Quantinar.com</a></div>
+          </div>
+        </div>
+        <div>
+          <p>I'm a <strong>Ph.D. student in Cybernetics and Economic Statistics</strong> at the Bucharest University of Economic Studies (ASE), and currently an <strong>Early Stage Researcher in the MSCA Industrial Doctoral Network in Digital Finance</strong>, hosted by Cardo AI in Milan. </p>
+          <p>I hold an <strong>MSc in Applied Statistics &amp; Data Science</strong> from ASE, and I'm a researcher at the <strong>Institute of Digital Assets (IDA)</strong>, a global research and education institution dedicated to digital assets and their integration into the economy and society.</p>
+          <p>My interest lies in digital and traditional finance, particularly applying quantitative methods to forecasting and risk management, particularly extreme risk. My published and ongoing work spans tail-risk forecasting, credit risk modelling, the use of LLMs and agents as research tools, and everything in between.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PUBLICATIONS ================= -->
+  <section id="publications">
+    <div class="wrap reveal">
+      <div class="section-head">
+        <span class="section-num">02</span>
+        <h2 class="section-title">Publications</h2>
+      </div>
+      <div class="pub-list">
+
+        <div class="pub-item">
+          <div class="pub-year">2026</div>
+          <div>
+            <h3 class="pub-title">In the beginning was the Word: LLM-VaR and LLM-ES</h3>
+            <p class="pub-authors">D. T. Pele, V. Bolovăneanu, M.-B. Lin, R. Ren, A. T. Ginavar, B. Spilak, A.-V. Andrei, F.-M. Toma, S. Lessmann, W. K. Härdle</p>
+            <p class="pub-venue">Expert Systems with Applications, Vol. 295 · Elsevier · 1 Jan 2026</p>
+          </div>
+        </div>
+
+        <div class="pub-item">
+          <div class="pub-year">2026</div>
+          <div>
+            <h3 class="pub-title">Recalibrating Tail Risk Forecasts under Temporal Dependence</h3>
+            <p class="pub-authors">D. T. Pele, V. Bolovăneanu, A. T. Ginavar, S. Lessmann, W. K. Härdle</p>
+            <p class="pub-venue">SSRN Working Paper · 2026</p>
+          </div>
+        </div>
+
+        <div class="pub-item">
+          <div class="pub-year">2025</div>
+          <div>
+            <h3 class="pub-title">Cryptocurrency Market Analysis: Insights from Metcalfe's Law and Log-Periodic Power Laws</h3>
+            <p class="pub-authors">A. I. Conda, A.-T. Ginavar, D. T. Pele, M. Mazurencu-Marinescu-Pele</p>
+            <p class="pub-venue">Chapter in Handbook of Blockchain Analytics · Springer Nature · October 2025</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= TIMELINE ================= -->
+  <section id="timeline">
+    <div class="wrap reveal">
+      <div class="section-head">
+        <span class="section-num">03</span>
+        <div>
+          <h2 class="section-title">Timeline</h2>
+          <p class="section-desc">Positions and degrees</p>
+        </div>
+      </div>
+
+      <div class="timeline">
+
+        <div class="t-item">
+          <div class="t-date">2026<small>Jan — Current</small></div>
+          <div class="t-content">
+            <span class="t-tag">Role</span>
+            <h3 class="t-role">Early Stage Researcher</h3>
+            <p class="t-org">MSCA Industrial Doctoral Network — Digital Finance, Cardo AI</p>
+            <p class="t-loc">Milan, Italy</p>
+            <p class="t-desc">Benchmarking classical statistical learning against modern machine learning to forecast macroeconomic factors (interest rates, inflation, unemployment, house prices) that drive financial markets, then using those forecasts to generate what-if market scenarios.</p>
+          </div>
+        </div>
+
+        <div class="t-item">
+          <div class="t-date">2025<small>Jan — Jun 2026</small></div>
+          <div class="t-content">
+            <span class="t-tag">Role</span>
+            <h3 class="t-role">Ph.D. Researcher</h3>
+            <p class="t-org">IDA Institute of Digital Assets</p>
+            <p class="t-loc">Bucharest, Romania</p>
+            <ul>
+              <li>Collecting and analysing large datasets on digital asset markets</li>
+              <li>Developing quantitative models of price dynamics, market trends and investor behaviour</li>
+              <li>Code development (Python, R) and verification for research projects</li>
+              <li>Developing educational content for Quantinar and Quantlet, and maintaining IDA's websites</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="t-item">
+          <div class="t-date">2024<small>Oct — Current</small></div>
+          <div class="t-content education">
+            <span class="t-tag">Degree</span>
+            <h3 class="t-role">Ph.D., Cybernetics and Economic Statistics</h3>
+            <p class="t-org">Academia de Studii Economice din București (ASE)</p>
+            <p class="t-loc">Bucharest, Romania · Field: Statistics</p>
+            <p class="t-desc">Thesis: <em>Application of Large Language Model models in the forecast of digital asset returns.</em></p>
+          </div>
+        </div>
+
+        <div class="t-item">
+          <div class="t-date">2024<small>May — Dec</small></div>
+          <div class="t-content">
+            <span class="t-tag">Role</span>
+            <h3 class="t-role">Research Assistant</h3>
+            <p class="t-org">IDA Institute of Digital Assets</p>
+            <p class="t-loc">Bucharest, Romania</p>
+            <ul>
+              <li>Collecting and analysing datasets on digital asset markets</li>
+              <li>Developing quantitative models of price dynamics and investor behaviour</li>
+              <li>Code development and verification for research projects</li>
+              <li>Educational content for Quantinar; maintaining IDA websites</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="t-item">
+          <div class="t-date">2022<small>Oct — Current</small></div>
+          <div class="t-content">
+            <span class="t-tag">Role</span>
+            <h3 class="t-role">Data Analyst</h3>
+            <p class="t-org">GfK Consumer Panel | YouGov</p>
+            <p class="t-loc">Bucharest, Romania</p>
+            <ul>
+              <li>Preparing reports, quantitative analysis and client presentations</li>
+              <li>Comparison and trend analysis of purchasing and consumption behaviour</li>
+              <li>Implementing and testing new reporting solutions; automating the reporting process</li>
+              <li>Capturing, verifying and visualising quantitative data; writing documentation</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="t-item">
+          <div class="t-date">2022<small>Oct — Jul 2024</small></div>
+          <div class="t-content education">
+            <span class="t-tag">Degree</span>
+            <h3 class="t-role">MSc, Applied Statistics and Data Science</h3>
+            <p class="t-org">Academia de Studii Economice din București (ASE)</p>
+            <p class="t-loc">Bucharest, Romania</p>
+            <p class="t-desc">Coursework: time series analysis, financial market modelling, data mining &amp; big data, stochastic processes &amp; models, visualisation techniques, econometrics. Thesis: <em>Risk Modeling for Digital Assets.</em></p>
+          </div>
+        </div>
+
+        <div class="t-item">
+          <div class="t-date">2021<small>Apr — Aug 2022</small></div>
+          <div class="t-content">
+            <span class="t-tag">Role</span>
+            <h3 class="t-role">Account Executive</h3>
+            <p class="t-org">Mercury360 Communications</p>
+            <p class="t-loc">Bucharest, Romania</p>
+            <ul>
+              <li>Coordinating execution of advertising campaigns and their budgets</li>
+              <li>Centralising and analysing quantitative and qualitative field reports</li>
+              <li>Managing client and supplier relationships; negotiating supplier rates</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="t-item">
+          <div class="t-date">2019<small>Oct — Jul 2022</small></div>
+          <div class="t-content education">
+            <span class="t-tag">Degree</span>
+            <h3 class="t-role">BSc, Marketing</h3>
+            <p class="t-org">Academia de Studii Economice din București (ASE)</p>
+            <p class="t-loc">Bucharest, Romania</p>
+            <p class="t-desc">Coursework: advanced marketing research, consumer behaviour, statistics, econometrics, micro &amp; macroeconomics, finance. Thesis: <em>Analysis of purchasing and consumption behaviour on the Romanian alcoholic beverages market, based on the SNA-Focus study.</em></p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RESEARCH / PROJECTS ================= -->
+  <section id="research">
+    <div class="wrap reveal">
+      <div class="section-head">
+        <span class="section-num">04</span>
+        <div>
+          <h2 class="section-title">Research</h2>
+          <p class="section-desc">Work connected to my doctoral thesis, alongside independent projects in the same space.</p>
+        </div>
+      </div>
+      <div class="project-grid">
+        <div class="project-card">
+          <div class="p-date">Jan 2026 — Current</div>
+          <h3>AI for Scientific Discovery</h3>
+          <p>A side project that grew out of using AI, including agents, to aid my own research — now developing into a full research project. The end goal: using solely open-source and open-weight models for research purposes.</p>
+        </div>
+        <div class="project-card">
+          <div class="p-date">Mar 2025 — Current</div>
+          <h3>Quantile risk forecasting</h3>
+          <p>Tests fine-tuned time-series foundation models and LLM-based approaches against an econometric benchmark for Value-at-Risk, across a suite of backtests (traffic light, Acerbi–Szekely). Preliminary finding: AI-based models can match or surpass the true model under small samples and heavy tails — but performance is configuration-dependent.</p>
+        </div>
+        <div class="project-card">
+          <div class="p-date">Oct 2024 — Current</div>
+          <h3>A semi-analytic framework for DeFi long-short sizing</h3>
+          <p>Models the initial sizing of a leveraged DeFi long-short position under bivariate Kou double-exponential jump-diffusion dynamics, reducing survival-path payoff moments to killed expectations solvable via a finite-dimensional Laplace-domain linear system.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PUBLICATIONS ================= -->
+  <!-- ================= ACTIVITIES ================= -->
+  <section id="activities">
+    <div class="wrap reveal">
+      <div class="section-head">
+        <span class="section-num">05</span>
+        <h2 class="section-title">Activities</h2>
+      </div>
+      <div class="activity-cols">
+
+        <div class="activity-col">
+          <h3>Teaching</h3>
+          <div class="a-entry">
+            <div class="a-date">2025</div>
+            <div class="a-text"><strong>Digital Economics &amp; Decision Analytics</strong> — Faculty of Business Administration in Foreign Languages, ASE</div>
+          </div>
+        </div>
+
+        <div class="activity-col">
+          <h3>Conferences &amp; Seminars</h3>
+          <div class="a-entry">
+            <div class="a-date">Jun 2026 · Bucharest</div>
+            <div class="a-text">AIDA Conference — AI and Digital Assets in Energy and Finance</div>
+          </div>
+          <div class="a-entry">
+            <div class="a-date">Mar 2026 · Bucharest</div>
+            <div class="a-text">The 20th International Conference on Business Excellence</div>
+          </div>
+          <div class="a-entry">
+            <div class="a-date">Jan 2026</div>
+            <div class="a-text">MSCA Research Workshop — Practice of Digital Finance</div>
+          </div>
+          <div class="a-entry">
+            <div class="a-date">Mar 2025 · Bucharest</div>
+            <div class="a-text">The 19th International Conference on Business Excellence</div>
+          </div>
+          <div class="a-entry">
+            <div class="a-date">Nov 2024 · Bucharest</div>
+            <div class="a-text">ICAS2024 — 17th International Conference on Applied Statistics, National Institute of Statistics</div>
+          </div>
+        </div>
+
+        <div class="activity-col">
+          <h3>Other roles</h3>
+          <div class="a-entry">
+            <div class="a-text"><strong>Institute of Digital Assets</strong> — website administration (<a href="https://www.theida.net" target="_blank" rel="noopener">theida.net</a>, ida.ase.ro), LinkedIn marketing</div>
+          </div>
+          <div class="a-entry">
+            <div class="a-text"><strong>Quantinar.com</strong> — creating &amp; updating courses, incl. Selected Topics in Mathematical Statistics and Digital Economics &amp; Decision Analytics</div>
+          </div>
+          <div class="a-entry">
+            <div class="a-text"><strong>Quantlet.com</strong> — code creation and regular repository maintenance</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SKILLS / LANGUAGES ================= -->
+  <section id="skills">
+    <div class="wrap reveal">
+      <div class="section-head">
+        <span class="section-num">06</span>
+        <h2 class="section-title">Toolkit</h2>
+      </div>
+      <div class="skills-lang">
+        <div class="skill-grid">
+          <span class="skill-pill">Python</span>
+          <span class="skill-pill">R</span>
+          <span class="skill-pill">Git</span>
+          <span class="skill-pill">LaTeX</span>
+          <span class="skill-pill">Tableau</span>
+          <span class="skill-pill">IBM SPSS</span>
+          <span class="skill-pill">Power BI</span>
+        </div>
+        <div>
+          <div class="lang-row"><span>Romanian</span><span class="lvl">Native</span></div>
+          <div class="lang-row"><span>English — listening / reading</span><span class="lvl">C1 / C1</span></div>
+          <div class="lang-row"><span>English — spoken production / interaction</span><span class="lvl">C1 / C1</span></div>
+          <div class="lang-row"><span>English — writing</span><span class="lvl">C1</span></div>
+          <div class="lang-row"><span>Italian</span><span class="lvl">Un po'</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT / FOOTER ================= -->
+  <footer id="contact">
+    <div class="wrap">
+      <div class="footer-inner reveal">
+        <div>
+        </div>
+        <div class="foot-links">
+          <a href="mailto:theodorginavar@gmail.com">theodorginavar@gmail.com ↗</a>
+          <a href="https://www.linkedin.com/in/theodor-ginavar-a73a28244/" target="_blank" rel="noopener">LinkedIn ↗</a>
+          <a href="https://www.theida.net" target="_blank" rel="noopener">theIDA.net ↗</a>
+          <a href="https://www.quantlet.com" target="_blank" rel="noopener">Quantlet.com ↗</a>
+          <a href="https://www.quantinar.com" target="_blank" rel="noopener">Quantinar.com ↗</a>
+          <a href="files/CV_ATG.pdf" target="_blank" rel="noopener">Download CV (PDF) ↗</a>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© <span id="year"></span> Andrei-Theodor Ginavar</span>
+        <span>Bucharest, RO · Milan, IT</span>
+      </div>
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {threshold:0.12});
+  revealEls.forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
