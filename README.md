@@ -1,6 +1,6 @@
 # Andrei-Theodor Ginavar — Personal Site
 
-A single-page static site (Home / About / Timeline / Research / Publications / Activities / Contact), built from `CV_ATG_08_26.pdf`. No build step — plain HTML/CSS/JS, ready for GitHub Pages.
+A single-page static site (Home / About / Timeline / Research / Publications / Activities / Contact). plain HTML/CSS/JS, ready for GitHub Pages.
 
 ## Files
 
